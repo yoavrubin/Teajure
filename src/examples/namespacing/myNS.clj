@@ -8,28 +8,37 @@
   ; able to do division, as only +, - and * are used.
   (:refer-clojure :only [+ - *] ) 
   
-  ; absorbing other namespaces into our namespace
+  ; absorbing other namespaces into our namespace, using the :use directive
   (:use 
-    ; we need to define the path to the namespace
-    ; it is possible to define the header portion of the namespace,
-    ; and then add several endings
+   
+    ; if we need several namespaces with identical beginning, we can write that beginning once
+    ;and add the different endings separated from the beginning 
     (examples.namespacing  
           [a-to-d   :only     [b c] ]  ; this is the way to go
           [d-to-g  :exclude [d g] ] ; not a smart move - less control on the symbols you are adding
      )    ;  :verbose
    ) 
   
-  ; only loading namespaces, the symbols within these namespaces are not absorbed into
-  ; the current namespace. 
-  ; We can we can always alias the loaded namespaces, to save some typing, using the :as directive
-  ; If we need several namespaces with identical beginning, we write that beginning once,
-  ; and add the different endings in a space separated manner
+  ; the :require directive means *only* loading the namespaces, the symbols within these namespaces are not absorbed into the current namespace
   (:require 
+ 
+    ; if we need several namespaces with identical beginning, we can write that beginning once
+    ;and add the different endings separated from the beginning 
     (examples.namespacing 
-         [a-to-g :as A2G ] 
-         c-to-f
+      
+      ; the c-to-f is the end part of the namespace's name
+      c-to-f
+      
+      ; We can we can always alias the loaded namespaces, to save some typing, using the :as directive
+      ; note that since we're still in the context of examples.namespacing, than it is enough to write
+      ; just the end part of the namespace's name
+      [a-to-g :as A2G ] 
+         
     ) ; :verbose
-    (clojure 
+  
+   ; the :require directive allows to import several namespaces, and we put each "tree" of namespaces (same beginning, different ending)
+   ; in a different list.
+  (clojure 
       walk 
       [zip :as CZ]
     ) 
